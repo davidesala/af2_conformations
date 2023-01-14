@@ -347,7 +347,7 @@ class MMSeqs2Runner:
                                 pdbs.append(pdb)
                                 check_duplicates.append(pdbid)                           
                     
-                    elif pdb in templates:
+                    elif pdb in templates or templates[0] in ["Auto", "AUTO", "auto"]:
                         pdbs.append(sl[1])
                         logging.info(f"{ sl[0] }\t{ sl[1] }\t{ sl[2] }\t{ sl[10] }")
         

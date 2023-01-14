@@ -212,7 +212,7 @@ def remove_msa_for_custom_template_aligned_regions(feature_dict):
     tempseq = list(feature_dict['template_sequence'])
     for i,aa in enumerate(tempseq):
         if aa != '-':
-                mask[i] = True  
+            mask[i] = True  
     feature_dict['deletion_matrix_int'][:,mask] = 0
     feature_dict['msa'][:,mask] = 21
     return feature_dict

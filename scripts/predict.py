@@ -15,6 +15,7 @@ from typing import Any, List, Mapping, NoReturn
 from absl import logging
 import jax.numpy as jnp
 import jax
+import pickle
 
 def set_config(
     use_templates: bool,
@@ -139,10 +140,12 @@ def run_one_job(
 
     # Do one last bit of processing
     features = runner.process_features(features_in, random_seed=random_seed)
+      # Write out features as a pickled dictionary.
 
     # Generate the model
     result = runner.predict(features, random_seed)
     pred = protein.from_prediction(features, result)
+    prefeat = outname.rsplit(".",1)[0]
 
     # Write to file
     to_np = lambda a: np.asarray(a)
@@ -150,6 +153,10 @@ def run_one_job(
         prefix = outname.rsplit(".",1)[0]
         suffix = outname.rsplit(".",1)[-1]
         outname = prefix + f"_{to_np(result['ptm']):.2f}."  + suffix
+ 
+    with open(f'features_{prefeat}.pkl', 'wb') as f:
+        pickle.dump(result, f, protocol=4)
+
 
     to_pdb(outname, pred, result["plddt"], features_in["residue_index"])
 
